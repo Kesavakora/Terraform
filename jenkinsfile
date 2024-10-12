@@ -15,17 +15,16 @@ pipeline {
     agent  any
 
      stages {
-        stage('checkout'){
+        stage('checkout') {
             steps {
                 script {
-                    dir("main"){
+                    dir("main") {
                         git "https://github.com/Kesavakora/Terraform.git"
                     }
                 }
             }
         }
-
-    }
+     }
     stages {
         stage('Plan') {
             steps {
