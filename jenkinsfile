@@ -15,7 +15,7 @@ pipeline {
     agent  any
 
      stages {
-        stage('checkout') {
+         stage('checkout') {
             steps {
                 script {
                     dir("main") {
@@ -25,7 +25,7 @@ pipeline {
             }
         }
      }
-    stages {
+     stages {
         stage('Plan') {
             steps {
                 /*script {
@@ -38,7 +38,7 @@ pipeline {
             }
         }
 
-        stage('Approval') {
+     stage('Approval') {
             when {
                 not {
                     equals expected: true, actual: params.autoApprove
@@ -54,14 +54,14 @@ pipeline {
             }
         }
 
-        stage('Apply') {
+     stage('Apply') {
             steps {
                 sh "terraform apply -input=false tfplan"
             }
         }
     }
 
-    post {
+     post {
         always {
             archiveArtifacts artifacts: 'tfplan.txt'
         }
