@@ -23,8 +23,8 @@ pipeline {
             }
         }
      }
-    stages {
-        stage('Plan') {
+     stages {
+         stage('Plan') {
             steps {
                 script {
                     currentBuild.displayName = params.version
@@ -35,23 +35,21 @@ pipeline {
                 sh 'pwd; cd Terraform ; terraform show -no-color tfplan > tfplan.txt' 
             }
         }
-      stage('Approval') {
+        stage('Approval') {
             when {
                 not {
                     equals expected: true, actual: params.autoApprove
                 }
             }
-
             steps {
                 script {
                     def plan = readFile 'tfplan.txt'
                     input message: "Do you want to apply the plan?",
-                        parameters: [text(name: 'Plan', description: 'Please review the plan', defaultValue: plan)]
+                    parameters: [text(name: 'Plan', description: 'Please review the plan', defaultValue: plan)]
                 }
             }
         }
-
-     stage('Apply') {
+       stage('Apply') {
             steps {
                 sh "pwd; cd Terraform ; terraform apply -input=false tfplan"
             }
