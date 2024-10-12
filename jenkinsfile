@@ -26,17 +26,16 @@ pipeline {
     stages {
         stage('Plan') {
             steps {
-                /*script {
+                script {
                     currentBuild.displayName = params.version
-                }*/
+                }
                 sh 'pwd; cd Terraform ; terraform init -input=false'
                 sh 'pwd; cd Terraform ; terraform workspace select ${environment}'
                 sh "pwd; cd Terraform ; terraform plan -input=false -out tfplan -var 'version=${params.version}' --var-file=environments/${params.environment}.tfvars"
                 sh 'pwd; cd Terraform ; terraform show -no-color tfplan > tfplan.txt' 
             }
         }
-
-     stage('Approval') {
+      stage('Approval') {
             when {
                 not {
                     equals expected: true, actual: params.autoApprove
@@ -54,12 +53,11 @@ pipeline {
 
      stage('Apply') {
             steps {
-                sh "terraform apply -input=false tfplan"
+                sh "pwd; cd Terraform ; terraform apply -input=false tfplan"
             }
         }
     }
-
-     post {
+    post {
         always {
             archiveArtifacts artifacts: 'tfplan.txt'
         }
