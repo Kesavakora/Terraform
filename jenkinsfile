@@ -13,7 +13,7 @@ pipeline {
         //TF_IN_AUTOMATION      = '1'
     }
     agent any
-    stages{
+    stages {
         stage('checkout'){
             steps {
                 script {
