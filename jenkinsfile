@@ -41,7 +41,7 @@ pipeline {
                     equals expected: true, actual: params.autoApprove
                 }
             }
-        }
+        
             steps {
                 script {
                     def plan = readFile 'tfplan.txt'
@@ -55,9 +55,10 @@ pipeline {
                 sh "pwd; cd Terraform ; terraform apply -input=false tfplan"
             }
         }
-    /*post {
+}
+      post {
         always {
             archiveArtifacts artifacts: 'tfplan.txt'
         }
-    }*/
-}
+    }
+
