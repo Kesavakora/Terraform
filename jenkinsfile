@@ -55,9 +55,9 @@ pipeline {
                 sh "pwd; cd Terraform ; terraform apply -input=false tfplan"
             }
         }
-    post {
+    /*post {
         always {
             archiveArtifacts artifacts: 'tfplan.txt'
         }
-    }
+    }*/
 }
