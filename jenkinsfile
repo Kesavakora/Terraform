@@ -1,6 +1,5 @@
 pipeline {
    
-
     parameters {
         string(name: 'environment', defaultValue: 'default', description: 'Workspace/environment file to use for deployment')
         string(name: 'version', defaultValue: '', description: 'Version variable to pass to Terraform')
@@ -17,20 +16,11 @@ pipeline {
     stages {
         stage('checkout') {
             steps {
-                script {
-                    dir("main") {
-                        git "https://github.com/Kesavakora/Terraform.git"
-                    }
-                }
+                git credentialsId: 'GitHubCredentials', url: 'https://github.com/Kesavakora/Terraform.git'
             }
         }
-    }
-    stages {
         stage('Plan') {
             steps {
-                script {
-                    currentBuild.displayName = params.version
-                }
                 sh 'pwd; cd Terraform ; terraform init -input=false'
                 sh 'pwd; cd Terraform ; terraform workspace select ${environment}'
                 sh "pwd; cd Terraform ; terraform plan -input=false -out tfplan -var 'version=${params.version}' --var-file=environments/${params.environment}.tfvars"
