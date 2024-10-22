@@ -45,10 +45,10 @@ resource "null_resource" "copy-test-file" {
     private_key = file(aws_key_pair.tf-key-pair.key_name)
   }
 
-    provisioner "file" {
+    /*provisioner "file" {
     source = "/Users/kesavakora/Documents/Untitled 2.rtf"
     destination = "/usr/src/Untitled 2.rtf"
-  }
+  }*/
 
 }
 resource "aws_ebs_encryption_by_default" "enabled" {
