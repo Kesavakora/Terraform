@@ -19,6 +19,11 @@ pipeline {
                 git branch: 'main', credentialsId: 'GitHubCredentials', url: 'https://github.com/Kesavakora/Terraform.git'
             }
         }
+        stage('terraform init') {
+            steps {
+                sh '/opt/homebrew/bin/Terraform init'
+            }
+        }
         stage('terraform destroy') {
             steps {
                 sh '/opt/homebrew/bin/Terraform destroy --auto-approve'
