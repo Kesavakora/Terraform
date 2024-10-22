@@ -21,17 +21,17 @@ pipeline {
         }
         stage('terraform init') {
             steps {
-                sh 'Terraform init'
+                sh '/opt/homebrew/bin/Terraform init'
             }
         }
         stage('terraform plan') {
             steps {
-                sh 'Terraform plan -out myplan'
+                sh '/opt/homebrew/bin/Terraform plan -out myplan'
             }
         }
         stage('terraform apply') {
             steps {
-                sh 'Terraform apply --auto-approve'
+                sh '/opt/homebrew/bin/Terraform apply --auto-approve'
             }
         }
     }
