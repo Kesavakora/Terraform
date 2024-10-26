@@ -18,7 +18,8 @@ resource "aws_key_pair" "generated_key" {
 
 resource "aws_key_pair" "tf-key-pair" {
   key_name   = "tf-key-pair"
-  public_key = tls_private_key.rsa.public_key_openssh
+  public_key = var.keypair == true ?  tls_private_key.rsa.public_key_openssh :  0
+ 
 }
 resource "tls_private_key" "rsa" {
   algorithm = "RSA"
