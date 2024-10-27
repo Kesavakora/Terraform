@@ -1,7 +1,8 @@
 resource "aws_instance" "Ubuntu_Instance" {
   ami             = "ami-0522ab6e1ddcc7055"           # Amazon Linux 2 AMI
   instance_type   = "t2.micro"                        # Instance type
-  key_name        = aws_key_pair.tf-key-pair.key_name # Associate the key pair with the EC2 instance
+  #key_name        = aws_key_pair.tf-key-pair.key_name # Associate the key pair with the EC2 instance
+  key_name        = aws_key_pair.new_key_pair.key_name
   security_groups = [aws_security_group.allow_ssh.name]
   count           = 2
   #provider = aws.Administ
@@ -21,8 +22,8 @@ resource "aws_instance" "Ubuntu_Instance" {
       "touch Hello.txt",
       "echo Hello worlds  >> Hello.txt"
     ]
-  } 
-  
+  }
+
   connection {
     type        = "ssh"
     host        = self.public_ip
@@ -39,13 +40,13 @@ resource "aws_instance" "Ubuntu_Instance" {
 resource "null_resource" "copy-test-file" {
 
   connection {
-    type     = "ssh"
-    host     = aws_instance.Ubuntu_Instance[0].id
-    user     = "ubuntu"
+    type        = "ssh"
+    host        = aws_instance.Ubuntu_Instance[0].id
+    user        = "ubuntu"
     private_key = file(aws_key_pair.tf-key-pair.key_name)
   }
 
-    /*provisioner "file" {
+  /*provisioner "file" {
     source = "/Users/kesavakora/Documents/Untitled 2.rtf"
     destination = "/usr/src/Untitled 2.rtf"
   }*/
@@ -53,4 +54,14 @@ resource "null_resource" "copy-test-file" {
 }
 resource "aws_ebs_encryption_by_default" "enabled" {
   enabled = true
- }
+}
+
+terraform {
+  backend "s3" {
+    profile = "Administ" # AWS CLI profile name
+    encrypt = true
+    bucket  = "kesava-tf-log-bucket"
+    key     = "terraform.tfstate"
+    region  = "ap-south-1"
+  }
+}
