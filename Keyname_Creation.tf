@@ -31,6 +31,17 @@ resource "tls_private_key" "rsa" {
   rsa_bits  = 4096
 }
 
+variable "key_name" {
+  description = "The name of the key pair"
+  type        = string
+  default     = "tf-key-pair"
+}
+
+variable "public_key_path" {
+  description = "The path to the public key file"
+  type        = string
+  default     = tls_private_key.rsa.public_key_openssh
+}
 # Try to find an existing key pair
 data "aws_key_pair" "existing" {
   key_name = var.key_name
@@ -39,7 +50,7 @@ data "aws_key_pair" "existing" {
 
 # Conditionally create the key pair if it doesn't exist
 resource "aws_key_pair" "new_key_pair" {
-  count      = data.aws_key_pair.existing.id != "" ? 1 : 0
+  count      = data.aws_key_pair.existing.id != "" ? 0 : 1
   key_name   = var.key_name
   public_key = file(var.public_key_path)
 }
