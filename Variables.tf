@@ -7,5 +7,5 @@ variable "key_name" {
 variable "public_key_path" {
   description = "The path to the public key file"
   type        = string
-  default     = tls_private_key.rsa.public_key_openssh
+  default     = "~/.ssh/id_rsa.pub"
 }
