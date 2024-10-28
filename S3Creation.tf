@@ -1,12 +1,35 @@
-resource "aws_s3_bucket" "MyBucket" {
-  bucket = "Kesava-TF-Bucket"  # Change to your unique bucket name
+/*resource "aws_s3_bucket" "mybucket" {
+  bucket = "kesava-tf-bucket"  # Change to your unique bucket name
   #acl    = "private"  # Access control list; options include "private", "public-read", etc.
 
   tags = {
-    Name        = "MyBucket"
-    Environment = "Prod"
+    Name        = "mybucket"
+    Environment = "prod"
   }
   versioning {
     enabled = true
   }
+} */
+
+# Create an S3 bucket
+resource "aws_s3_bucket" "my_bucket" {
+  bucket = "kesava-tf-bucket"  # Replace with a globally unique bucket name
+
+  tags = {
+    Name = "My S3 Bucket"
+  }
+}
+
+# Enable versioning on the S3 bucket
+resource "aws_s3_bucket_versioning" "my_bucket_versioning" {
+  bucket = aws_s3_bucket.my_bucket.id
+
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+# Output the bucket name
+output "bucket_name" {
+  value = aws_s3_bucket.my_bucket.bucket
 }

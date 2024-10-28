@@ -2,7 +2,8 @@ resource "aws_instance" "Ubuntu_Instance" {
   ami             = "ami-0522ab6e1ddcc7055"           # Amazon Linux 2 AMI
   instance_type   = "t2.micro"                        # Instance type
   #key_name        = aws_key_pair.tf-key-pair.key_name # Associate the key pair with the EC2 instance
-  key_name        = aws_key_pair.new_key_pair.key_name
+
+  key_name        = var.key_name
   security_groups = [aws_security_group.allow_ssh.name]
   count           = 2
   #provider = aws.Administ
@@ -28,7 +29,7 @@ resource "aws_instance" "Ubuntu_Instance" {
     type        = "ssh"
     host        = self.public_ip
     user        = "ubuntu"
-    private_key = file(aws_key_pair.tf-key-pair.key_name)
+    private_key = file(local_file.tf-key.filename)
     timeout     = "4m"
   }
 
@@ -43,7 +44,7 @@ resource "null_resource" "copy-test-file" {
     type        = "ssh"
     host        = aws_instance.Ubuntu_Instance[0].id
     user        = "ubuntu"
-    private_key = file(aws_key_pair.tf-key-pair.key_name)
+    private_key = file(local_file.tf-key.filename)
   }
 
   /*provisioner "file" {
