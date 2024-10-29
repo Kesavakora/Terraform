@@ -54,7 +54,7 @@ pipeline {
                     }  // if
 
                 }
-            } /
+            } 
         }  
         stage('terraform apply') {
             steps {
