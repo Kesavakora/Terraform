@@ -46,11 +46,11 @@ pipeline {
                 script{  
                     if (params.ACCION == "destroy"){
                         sh 'echo "llego" + params.ACCION'   
-                        sh 'terraform destroy -auto-approve'
+                        sh '/opt/homebrew/bin/terraform destroy -auto-approve'
                     } 
                     else {
                         sh ' echo  "apply" + params.ACCION'                 
-                        sh 'terraform apply -refresh=true -auto-approve'  
+                        sh '/opt/homebrew/bin/terraform apply -refresh=true -auto-approve'  
                     }  // if
 
                 }
