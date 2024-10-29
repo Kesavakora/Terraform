@@ -7,6 +7,8 @@ pipeline {
         string(name: 'environment', defaultValue: 'default', description: 'Workspace/environment file to use for deployment')
         string(name: 'version', defaultValue: '', description: 'Version variable to pass to Terraform')
         booleanParam(name: 'autoApprove', defaultValue: false, description: 'Automatically run apply after generating plan?')
+        choice(name: 'ENTORNOS', choices: ['dev', 'pre', 'pro'], description: 'Seleccione el entorno a utilizar')
+        choice(name: 'ACCION', choices: ['', 'plan-apply', 'destroy'], description: 'Seleccione el entorno a utilizar')
     }
     environment {
         AWS_ACCESS_KEY_ID     = credentials('AWS_ACCESS_KEY_ID')
@@ -29,6 +31,30 @@ pipeline {
                 sh '/opt/homebrew/bin/Terraform plan -out myplan'
             }
         }
+
+        stage('Confirmación de accion') {
+            steps {
+                script {
+                    def userInput = input(id: 'confirm', message: params.ACCION + '?', parameters: [ [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Apply terraform', name: 'confirm'] ])
+                }
+            }
+        }
+        
+        stage('Terraform apply or destroy ----------------') {
+            steps {
+               sh 'echo "comienza"'
+            script{  
+                if (params.ACCION == "destroy"){
+                         sh 'echo "llego" + params.ACCION'   
+                         sh 'terraform destroy -auto-approve'
+                } else {
+                         sh ' echo  "llego" + params.ACCION'                 
+                         sh 'terraform apply -refresh=true -auto-approve'  
+                }  // if
+
+            }
+            } //steps
+        }  //stage
         stage('terraform apply') {
             steps {
                 sh '/opt/homebrew/bin/Terraform apply --auto-approve'
