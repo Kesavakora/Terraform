@@ -56,10 +56,10 @@ pipeline {
                 }
             } /
         }  
-        /*stage('terraform apply') {
+        stage('terraform apply') {
             steps {
                 sh '/opt/homebrew/bin/Terraform apply --auto-approve'
             }
-        }*/
+        }
     }
 }
