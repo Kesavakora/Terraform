@@ -60,7 +60,7 @@ resource "aws_ebs_encryption_by_default" "enabled" {
   enabled = true
 }
 
-terraform {
+/*terraform {
   backend "s3" {
     profile = "Administ" # AWS CLI profile name
     encrypt = true
@@ -68,6 +68,6 @@ terraform {
     key     = "terraform.tfstate"
     region  = "ap-south-1"
   }
-}
+}*/
 
 
