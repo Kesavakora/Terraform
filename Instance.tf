@@ -1,6 +1,6 @@
 resource "aws_instance" "Ubuntu_Instance" {
-  ami             = "ami-0522ab6e1ddcc7055"           # Amazon Linux 2 AMI
-  instance_type   = "t2.micro"                        # Instance type
+  ami           = "ami-0522ab6e1ddcc7055" # Amazon Linux 2 AMI
+  instance_type = "t2.micro"              # Instance type
   #key_name        = aws_key_pair.tf-key-pair.key_name # Associate the key pair with the EC2 instance
 
   key_name        = var.key_name
@@ -23,6 +23,10 @@ resource "aws_instance" "Ubuntu_Instance" {
       "touch Hello.txt",
       "echo Hello worlds  >> Hello.txt"
     ]
+  }
+
+  provisioner "Local-exec"{
+    command =  "echo [webservers] ${self.public_ip} > /etc/ansible/hosts"
   }
 
   connection {
@@ -51,13 +55,12 @@ resource "null_resource" "copy-test-file" {
     source = "/Users/kesavakora/Documents/Untitled 2.rtf"
     destination = "/usr/src/Untitled 2.rtf"
   }*/
-
 }
 resource "aws_ebs_encryption_by_default" "enabled" {
   enabled = true
 }
 
-/*terraform {
+terraform {
   backend "s3" {
     profile = "Administ" # AWS CLI profile name
     encrypt = true
@@ -65,4 +68,6 @@ resource "aws_ebs_encryption_by_default" "enabled" {
     key     = "terraform.tfstate"
     region  = "ap-south-1"
   }
-}*/
+}
+
+
