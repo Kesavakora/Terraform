@@ -25,8 +25,13 @@ resource "aws_instance" "Ubuntu_Instance" {
     ]
   }
 
-  provisioner "Local-exec"{
-    command =  "echo [webservers] ${self.public_ip} > /etc/ansible/hosts"
+  /*provisioner "Local_exec"{
+    command =  "echo [webservers] \n${self.public_ip} > /etc/ansible/hosts"
+  }*/
+
+  provisioner "file" {
+    source = "~/Users/kesavakora/Documents/JenkinsScript.rtf"
+    destination = "~/usr/src/JenkinsScript.rtf"
   }
 
   connection {
@@ -50,15 +55,17 @@ resource "null_resource" "copy-test-file" {
     user        = "ubuntu"
     private_key = file(local_file.tf-key.filename)
   }
-
-  /*provisioner "file" {
-    source = "/Users/kesavakora/Documents/Untitled 2.rtf"
-    destination = "/usr/src/Untitled 2.rtf"
-  }*/
 }
 resource "aws_ebs_encryption_by_default" "enabled" {
   enabled = true
 }
+
+resource "null_resource" "generate_key_pairs" {
+    provisioner "local-exec" {
+    command =  "echo [webservers] \n ${aws_instance.Ubuntu_Instance.*.public_ip} \n > /etc/ansible/hosts"
+    #when = create
+    }
+  }
 
 /*terraform {
   backend "s3" {
@@ -69,5 +76,3 @@ resource "aws_ebs_encryption_by_default" "enabled" {
     region  = "ap-south-1"
   }
 }*/
-
-
