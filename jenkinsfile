@@ -18,7 +18,7 @@ pipeline {
     stages {
         stage('git checkout') {
             steps {
-                git branch: 'main', credentialsId: 'GitHubCredentials', url: 'https://gitlab.com/kkm6964645/MyCode.git'
+                git branch: 'main', credentialsId: 'GitHubCredentials', url: 'https://github.com/Kesavakora/Terraform.git'
             }
         }
         stage('terraform init') {
