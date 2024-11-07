@@ -33,11 +33,6 @@ resource "aws_instance" "Ubuntu_Instance" {
     ]
   }
 
-  provisioner "file" {
-    source = "/Users/kesavakora/Documents/JenkinsScript.rtf"
-    destination = "/usr/src/JenkinsScript.rtf"
-  }
-
   connection {
     type        = "ssh"
     host        = self.public_ip
@@ -66,7 +61,7 @@ resource "aws_ebs_encryption_by_default" "enabled" {
 
 resource "null_resource" "generate_key_pairs" {
     provisioner "local-exec" {
-    command =  "echo [webservers] \n ${aws_instance.Ubuntu_Instance.*.public_ip} \n > /etc/ansible/hosts"
+    command =  "echo [webservers] \n ${aws_instance.Ubuntu_Instance.*.public_ip} \n >> /etc/ansible/hosts"
     #when = create
     }
   }
