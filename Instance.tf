@@ -14,24 +14,28 @@ resource "aws_instance" "Ubuntu_Instance" {
   echo "*** Installing apache2"
   sudo apt update -y
   sudo apt upgrade -y
-  sudo install apache2
+  sudo install apache2 -y
+  sudo start apache2
   echo "*** Completed Installing apache2"
   EOF
 
   provisioner "remote-exec" {
     inline = [
       "touch Hello.txt",
-      "echo Hello worlds  >> Hello.txt"
+      "echo Hello worlds  >> Hello.txt",
+      "sudo apt update -y",
+      "sudo apt install apache2 -y",
+      "sudo start apache2",
+      "sudo sed -i 's/80/8080/' /etc/apache2/ports.conf",
+      "sudo sed -i 's/*:80/*:8080/' /etc/apache2/sites-enabled/000-default.conf",
+      "sudo ufw allow 8080",                  # Open the new port on the firewall
+      "sudo systemctl restart apache2"        # Restart Apache to apply changes
     ]
   }
 
-  /*provisioner "Local_exec"{
-    command =  "echo [webservers] \n${self.public_ip} > /etc/ansible/hosts"
-  }*/
-
   provisioner "file" {
-    source = "~/Users/kesavakora/Documents/JenkinsScript.rtf"
-    destination = "~/usr/src/JenkinsScript.rtf"
+    source = "/Users/kesavakora/Documents/JenkinsScript.rtf"
+    destination = "/usr/src/JenkinsScript.rtf"
   }
 
   connection {
