@@ -24,6 +24,7 @@ resource "aws_instance" "Ubuntu_Instance" {
       "touch Hello.txt",
       "echo Hello worlds  >> Hello.txt",
       "sudo apt update -y",
+      "sudo apt install git -y",
       "sudo apt install apache2 -y",
       "sudo start apache2",
       "sudo sed -i 's/80/8080/' /etc/apache2/ports.conf",
@@ -59,12 +60,17 @@ resource "aws_ebs_encryption_by_default" "enabled" {
   enabled = true
 }
 
-resource "null_resource" "generate_key_pairs" {
-    provisioner "local-exec" {
-    command =  "echo [webservers] \n ${aws_instance.Ubuntu_Instance.*.public_ip} \n >> /etc/ansible/hosts"
-    #when = create
-    }
+resource "null_resource" "ansible_hosts" {
+  provisioner "local-exec" {
+    command = <<EOT
+      # Clear the hosts file
+      sudo sh -c 'echo "" > /etc/ansible/hosts'
+      echo "[webservers]" | sudo tee -a /etc/ansible/hosts
+      echo "${join("\n", aws_instance.Ubuntu_Instance[*].public_ip)}" | sudo tee -a /etc/ansible/hosts
+    EOT
   }
+  depends_on = [aws_instance.Ubuntu_Instance]
+}
 
 /*terraform {
   backend "s3" {
