@@ -64,9 +64,9 @@ resource "null_resource" "ansible_hosts" {
   provisioner "local-exec" {
     command = <<EOT
       # Clear the hosts file
-      sudo sh -c 'echo "" > /etc/ansible/hosts'
-      echo "[webservers]" | sudo tee -a /etc/ansible/hosts
-      echo "${join("\n", aws_instance.Ubuntu_Instance[*].public_ip)}" | sudo tee -a /etc/ansible/hosts
+      echo "${var.sudo_password}" | sudo -S sh -c 'echo "" > /etc/ansible/hosts'
+      echo "[webservers]" | sudo -S tee -a /etc/ansible/hosts
+      echo "${join("\n", aws_instance.Ubuntu_Instance[*].public_ip)}" | sudo -S tee -a /etc/ansible/hosts
     EOT
   }
   depends_on = [aws_instance.Ubuntu_Instance]

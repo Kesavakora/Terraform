@@ -1,7 +1,7 @@
 variable "key_name" {
   description = "The name of the key pair to use or create"
   type        = string
-  default     = "my-key-pair"  # Replace with your key pair name
+  default     = "my-key-pair" # Replace with your key pair name
 }
 
 variable "public_key_path" {
@@ -14,4 +14,9 @@ variable "create_key_pair" {
   description = "Whether to create a new key pair if it doesn't already exist"
   type        = bool
   default     = false
+}
+
+variable "sudo_password" {
+  type = string
+  default = "Nannalu@2"
 }
