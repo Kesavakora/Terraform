@@ -28,7 +28,7 @@ resource "aws_s3_bucket_versioning" "my_bucket_versioning" {
   }
 }
 
-terraform {
+/*terraform {
   backend "s3" {
     profile = "Administ" # AWS CLI profile name
     encrypt = true
@@ -37,7 +37,7 @@ terraform {
     region  = "ap-south-1"
     dynamodb_table = "terraform-lock"
   }
-}
+}*/
 
 # Output the bucket name
 output "bucket_name" {
