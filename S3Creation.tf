@@ -13,7 +13,7 @@
 
 # Create an S3 bucket
 resource "aws_s3_bucket" "my_bucket" {
-  bucket = "kesava-tf-bucket"  # Replace with a globally unique bucket name
+  bucket = "kesava-tf-bucket" # Replace with a globally unique bucket name
 
   tags = {
     Name = "My S3 Bucket"
@@ -23,9 +23,19 @@ resource "aws_s3_bucket" "my_bucket" {
 # Enable versioning on the S3 bucket
 resource "aws_s3_bucket_versioning" "my_bucket_versioning" {
   bucket = aws_s3_bucket.my_bucket.id
-
   versioning_configuration {
     status = "Enabled"
+  }
+}
+
+terraform {
+  backend "s3" {
+    profile = "Administ" # AWS CLI profile name
+    encrypt = true
+    bucket  = "kesava-tf-bucket"
+    key     = "terraform.tfstate"
+    region  = "ap-south-1"
+    dynamodb_table = "terraform-lock"
   }
 }
 

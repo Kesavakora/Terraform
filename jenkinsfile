@@ -1,8 +1,6 @@
 pipeline {
    agent any
-   /*tools{
-        tool name: 'terraform', type: 'terraform'
-   }*/
+
     parameters {
       /*  string(name: 'environment', defaultValue: 'default', description: 'Workspace/environment file to use for deployment')
         string(name: 'version', defaultValue: '', description: 'Version variable to pass to Terraform')
@@ -32,7 +30,7 @@ pipeline {
             }
         }
 
-        stage('Confirmación de accion') {
+        stage('confirmation for action') {
             steps {
                 script {
                     def userInput = input(id: 'confirm', message: params.ACCION + '?', parameters: [ [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Apply terraform', name: 'confirm'] ])
@@ -42,10 +40,10 @@ pipeline {
         
         stage('Terraform apply or destroy ----------------') {
             steps {
-               sh 'echo "comienza"'
+               //sh 'echo "comienza"'
                 script{  
                     if (params.ACCION == "destroy"){
-                        sh 'echo "llego" + params.ACCION'   
+                        sh 'echo "destroy" + params.ACCION'   
                         sh '/opt/homebrew/bin/terraform destroy -auto-approve'
                     } 
                     else {
@@ -55,11 +53,6 @@ pipeline {
 
                 }
             } 
-        }  
-        /*stage('terraform apply') {
-            steps {
-                sh '/opt/homebrew/bin/Terraform apply --auto-approve'
-            }
-        }*/
+        }
     }
 }

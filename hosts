@@ -1,0 +1,8 @@
+<<EOT
+[web_servers]
+>> "/etc/ansible/hosts"
+13.235.82.35
+>> "/etc/ansible/hosts"
+65.2.57.143
+
+EOT

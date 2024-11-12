@@ -38,7 +38,7 @@ resource "aws_instance" "Ubuntu_Instance" {
     type        = "ssh"
     host        = self.public_ip
     user        = "ubuntu"
-    private_key = file(local_file.tf-key.filename)
+    private_key = file(local_file.tf-z.filename)
     timeout     = "4m"
   }
 
@@ -56,6 +56,7 @@ resource "null_resource" "copy-test-file" {
     private_key = file(local_file.tf-key.filename)
   }
 }
+
 resource "aws_ebs_encryption_by_default" "enabled" {
   enabled = true
 }
@@ -72,12 +73,3 @@ resource "null_resource" "ansible_hosts" {
   depends_on = [aws_instance.Ubuntu_Instance]
 }
 
-/*terraform {
-  backend "s3" {
-    profile = "Administ" # AWS CLI profile name
-    encrypt = true
-    bucket  = "kesava-tf-log-bucket"
-    key     = "terraform.tfstate"
-    region  = "ap-south-1"
-  }
-}*/
