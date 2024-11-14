@@ -77,4 +77,3 @@ resource "null_resource" "ansible_hosts" {
   }
   depends_on = [aws_instance.Ubuntu_Instance]
 }
-
