@@ -43,7 +43,7 @@ resource "aws_instance" "Ubuntu_Instance" {
     type        = "ssh"
     host        = self.public_ip
     user        = "ubuntu"
-    private_key = file(local_file.tf_key[*].filename)
+    private_key = file(local_file.tf-key.id)
     timeout     = "4m"
   }
 
@@ -56,9 +56,9 @@ resource "null_resource" "copy-test-file" {
 
   connection {
     type        = "ssh"
-    host        = aws_instance.Ubuntu_Instance[0].id
+    host        = aws_instance.Ubuntu_Instance[*].id
     user        = "ubuntu"
-    private_key = file(local_file.tf_key[*].filename)
+    private_key = file(local_file.tf_key.id)
   }
 }
 
