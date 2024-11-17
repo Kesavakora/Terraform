@@ -51,8 +51,6 @@ resource "local_file" "tf-key" {
   filename = "my-key-pair"
 }
 # Output the key pair ID based on whether it was created
-/*output "key_pair_id" {
+output "key_pair_id" {
   value = length(aws_key_pair.new_key_pair) > 0 ? aws_key_pair.new_key_pair[0].id : var.key_name
 }
-*/
-
