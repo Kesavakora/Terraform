@@ -30,8 +30,9 @@ resource "aws_instance" "Ubuntu_Instance" {
       "sudo sed -i 's/80/8081/' /etc/apache2/ports.conf",
       "sudo sed -i 's/*:80/*:8081/' /etc/apache2/sites-enabled/000-default.conf",
       "sudo ufw allow 8081",            # Open the new port on the firewall
+      "sudo ufw allow 8080/tcp",
+      "sudo ufw reload",
       "sudo systemctl restart apache2", # Restart Apache to apply changes
-      
     ]
   }
 
