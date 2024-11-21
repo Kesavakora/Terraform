@@ -39,18 +39,18 @@ resource "tls_private_key" "rsa" {
 
 # Conditionally create the key pair based on the variable
 resource "aws_key_pair" "new_key_pair" {
-  count    = var.create_key_pair ? 0 : 1
+  count    = var.key_name ? 1: 0
   key_name = var.key_name
   #public_key = file(var.public_key_path)
-  public_key = tls_private_key.rsa.public_key_openssh
+  public_key = file("~/.ssh/${var.key_name}")
+  #public_key = tls_private_key.rsa.public_key_openssh
 }
 
 resource "local_file" "tf-key" {
-  count    = var.create_key_pair ? 0 : 1
+  count    = var.key_name ? 1: 0
   content  = tls_private_key.rsa.private_key_pem
   filename = "my-key-pair"
 }
-# Output the key pair ID based on whether it was created
-output "key_pair_id" {
-  value = length(aws_key_pair.new_key_pair) > 0 ? aws_key_pair.new_key_pair[0].id : var.key_name
-}
+
+
+

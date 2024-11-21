@@ -27,12 +27,15 @@ resource "aws_instance" "Ubuntu_Instance" {
       "sudo apt install git -y",
       "sudo apt install apache2 -y",
       "sudo start apache2",
-      "sudo sed -i 's/80/8081/' /etc/apache2/ports.conf",
-      "sudo sed -i 's/*:80/*:8081/' /etc/apache2/sites-enabled/000-default.conf",
-      "sudo ufw allow 8081",            # Open the new port on the firewall
-      "sudo ufw allow 8080/tcp",
-      "sudo ufw reload",
+      "sudo sed -i 's/80/8080/' /etc/apache2/ports.conf",
+      "sudo sed -i 's/*:80/*:8080/' /etc/apache2/sites-enabled/000-default.conf",
+      "sudo ufw allow 8080",            # Open the new port on the firewall
       "sudo systemctl restart apache2", # Restart Apache to apply changes
+      "sudo apt install -y apt-transport-https ca-certificates curl software-properties-common",
+      "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -",
+      "sudo add-apt-repository -y deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable",
+      "sudo apt update -y",
+      "sudo apt install -y docker-ce"
     ]
   }
 
@@ -40,7 +43,7 @@ resource "aws_instance" "Ubuntu_Instance" {
     type        = "ssh"
     host        = self.public_ip
     user        = "ubuntu"
-    private_key = file(local_file.tf-key[0].filename)
+    private_key = file(local_file.tf-key.id)
     timeout     = "4m"
   }
 
@@ -55,7 +58,7 @@ resource "null_resource" "copy-test-file" {
     type        = "ssh"
     host        = aws_instance.Ubuntu_Instance[*].id
     user        = "ubuntu"
-    private_key = file(local_file.tf-key[0].filename)
+    private_key = file(local_file.tf_key.id)
   }
 }
 
