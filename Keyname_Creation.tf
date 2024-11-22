@@ -47,7 +47,7 @@ resource "aws_key_pair" "new_key_pair" {
 }
 
 resource "local_file" "tf-key" {
-  count    = var.key_name ? 1: 0
+  #count    = var.key_name ? 1: 0
   content  = tls_private_key.rsa.private_key_pem
   filename = "my-key-pair"
 }
