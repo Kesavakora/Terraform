@@ -43,7 +43,7 @@ resource "aws_instance" "Ubuntu_Instance" {
     type        = "ssh"
     host        = self.public_ip
     user        = "ubuntu"
-    private_key = file(local_file.tf_key.id)
+    private_key = file(local_file.tf-key[0].filename)
     timeout     = "4m"
   }
 
