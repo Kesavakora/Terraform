@@ -5,7 +5,7 @@ pipeline {
       /*  string(name: 'environment', defaultValue: 'default', description: 'Workspace/environment file to use for deployment')
         string(name: 'version', defaultValue: '', description: 'Version variable to pass to Terraform')
         booleanParam(name: 'autoApprove', defaultValue: false, description: 'Automatically run apply after generating plan?') */
-        choice(name: 'ENTORNOS', choices: ['dev', 'pre', 'pro'], description: 'Seleccione el entorno a utilizar')
+        choice(name: 'ENTORNOS', choices: ['dev', 'pre', 'prd'], description: 'Seleccione el entorno a utilizar')
         choice(name: 'ACCION', choices: ['', 'plan-apply', 'destroy'], description: 'Seleccione el entorno a utilizar')
     }
     environment {
