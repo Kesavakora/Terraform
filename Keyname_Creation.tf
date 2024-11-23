@@ -32,14 +32,14 @@ resource "tls_private_key" "rsa" {
 }
 
 # Try to find an existing key pair
-/*data "aws_key_pair" "existing" {
-  key_name = var.key_name
+data "aws_key_pair" "existing" {
+  key_name = file("~/.jenkins/workspace/EC2CreationTerraform/${var.key_name}")
   # This will attempt to read the key from AWS
-}*/
+}
 
 # Conditionally create the key pair based on the variable
 resource "aws_key_pair" "new_key_pair" {
-  count    = var.create_key_pair ? 1 : 0
+  count    = file("~/.jenkins/workspace/EC2CreationTerraform/${var.key_name}") == 1 ? 1 : 0
   key_name = var.key_name
   #public_key = file(var.public_key_path)
   public_key = file("~/.jenkins/workspace/EC2CreationTerraform/${var.key_name}")
@@ -47,7 +47,7 @@ resource "aws_key_pair" "new_key_pair" {
 }
 
 resource "local_file" "tf-key" {
-  count    = var.create_key_pair ? 1 : 0
+  count    = file("~/.jenkins/workspace/EC2CreationTerraform/${var.key_name}") == 1 ? 1 : 0
   content  = tls_private_key.rsa.private_key_pem
   filename = "my-key-pair"
 }
