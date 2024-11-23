@@ -40,7 +40,7 @@ data "aws_key_pair" "existing" {
 
 # Conditionally create the key pair based on the variable
 resource "aws_key_pair" "new_key_pair" {
-  count    = file("~/.jenkins/workspace/EC2CreationTerraform/${var.key_name}") == 0 ? 1 : 0
+  count    = file("~/.jenkins/workspace/EC2CreationTerraform/${var.key_name}") == "" ? 1 : 0
   key_name = "~/.jenkins/workspace/EC2CreationTerraform/${var.key_name}"
   public_key = file("~/.jenkins/workspace/EC2CreationTerraform/${var.key_name}")
 }
