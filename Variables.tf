@@ -1,7 +1,7 @@
 variable "key_name" {
   description = "The name of the key pair to use or create"
   type        = string
-  default     = "my-key-pair" # Replace with your key pair name
+  default     = "my-key-pair" # Key Pair Name
 }
 
 variable "public_key_path" {
