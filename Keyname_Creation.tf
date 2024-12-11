@@ -31,10 +31,10 @@ resource "tls_private_key" "rsa" {
   rsa_bits  = 4096
 }
 
-/*# Try to find an existing key pair
+# Try to find an existing key pair
 data "aws_key_pair" "existing" {
-  key_name = "~/.jenkins/workspace/EC2CreationTerraform/${var.key_name}"
-}*/
+  key_name = var.key_name
+}
 
 # Conditionally create the key pair based on the variable
 resource "aws_key_pair" "new_key_pair" {
@@ -52,5 +52,5 @@ resource "local_file" "tf-key" {
   #count    = file("~/.jenkins/workspace/EC2CreationTerraform/${var.key_name}") == 0 ? 1 : 0
   #count = data.aws_key_pair.existing.id != "" ? 0 : 1
   content  = tls_private_key.rsa.private_key_pem
-  filename = "my-key-pair"
+  filename = var.key_name
 }
