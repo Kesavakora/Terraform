@@ -38,10 +38,14 @@ data "aws_key_pair" "existing" {
 
 # Conditionally create the key pair based on the variable
 resource "aws_key_pair" "new_key_pair" {
-  #count    = file("~/.jenkins/workspace/EC2CreationTerraform/${var.key_name}") == "" ? 1 : 0
+  /*#count    = file("~/.jenkins/workspace/EC2CreationTerraform/${var.key_name}") == "" ? 1 : 0
   count = data.aws_key_pair.existing.id != "" ? 0 : 1
   key_name = "~/.jenkins/workspace/EC2CreationTerraform/${var.key_name}"
-  public_key = file("~/.jenkins/workspace/EC2CreationTerraform/${var.key_name}")
+  public_key = file("~/.jenkins/workspace/EC2CreationTerraform/${var.key_name}")*/
+  count    = var.create_key_pair ? 1 : 0
+  key_name = var.key_name
+  #public_key = file(var.public_key_path)
+  public_key = tls_private_key.rsa.public_key_openssh
 }
 
 resource "local_file" "tf-key" {
