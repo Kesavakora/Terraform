@@ -31,10 +31,10 @@ resource "tls_private_key" "rsa" {
   rsa_bits  = 4096
 }
 
-# Try to find an existing key pair
+/*# Try to find an existing key pair
 data "aws_key_pair" "existing" {
   key_name = "~/.jenkins/workspace/EC2CreationTerraform/${var.key_name}"
-}
+}*/
 
 # Conditionally create the key pair based on the variable
 resource "aws_key_pair" "new_key_pair" {
