@@ -33,9 +33,7 @@ resource "tls_private_key" "rsa" {
 
 # Try to find an existing key pair
 data "aws_key_pair" "existing" {
-  count    = length("/Users/kesavamkora/.jenkins/workspace/EC2CreationTerraform/${var.key_name}") ? 0 : 1
-  key_name = file("/Users/kesavamkora/.jenkins/workspace/EC2CreationTerraform/${var.key_name}")
-  # This will attempt to read the key from AWS
+  key_name = var.key_name
 }
 
 # Conditionally create the key pair based on the variable
