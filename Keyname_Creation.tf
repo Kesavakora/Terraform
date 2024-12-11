@@ -33,7 +33,7 @@ resource "tls_private_key" "rsa" {
 
 # Try to find an existing key pair
 data "aws_key_pair" "existing" {
-  count    = length("/Users/kesavamkora/.jenkins/workspace/EC2CreationTerraform/${var.key_name}") == 0
+  count    = length("/Users/kesavamkora/.jenkins/workspace/EC2CreationTerraform/${var.key_name}") ? 0 : 1
   key_name = file("/Users/kesavamkora/.jenkins/workspace/EC2CreationTerraform/${var.key_name}")
   # This will attempt to read the key from AWS
 }
