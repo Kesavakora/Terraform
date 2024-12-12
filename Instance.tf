@@ -52,13 +52,17 @@ resource "aws_instance" "Ubuntu_Instance" {
   }
 }
 
-resource "null_resource" "copy-test-file" {
+resource "local_file" "tf-key" {
+  content  = "Your key content here"
+  filename = "${path.module}/my-key-pair"
+}
 
+resource "null_resource" "copy-test-file" {
   connection {
     type        = "ssh"
     host        = aws_instance.Ubuntu_Instance[*].id
     user        = "ubuntu"
-    private_key = file(local_file.tf_key.id)
+    private_key = file(local_file.tf_key.filename)
   }
 }
 
