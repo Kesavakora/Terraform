@@ -33,7 +33,7 @@ resource "tls_private_key" "rsa" {
 # Conditionally create the key pair based on the variable
 resource "aws_key_pair" "generated_key" {
   key_name   = var.key_name
-  public_key = tls_private_key.example.public_key_openssh
+  public_key = tls_private_key.rsa.public_key_openssh
 }
 resource "local_file" "tf-key" {
   content  = tls_private_key.rsa.private_key_pem
