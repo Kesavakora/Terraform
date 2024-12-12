@@ -43,18 +43,13 @@ resource "aws_instance" "Ubuntu_Instance" {
     type        = "ssh"
     host        = self.public_ip
     user        = "ubuntu"
-    private_key = file(local_file.tf-key.id)
+    private_key = file(local_file.tf-key.filename)
     timeout     = "4m"
   }
 
   tags = {
     Name = "Kesava Instance"
   }
-}
-
-resource "local_file" "tf-key" {
-  content  = "Your key content here"
-  filename = "${path.module}/my-key-pair"
 }
 
 resource "null_resource" "copy-test-file" {
