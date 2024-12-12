@@ -39,7 +39,6 @@ resource "tls_private_key" "rsa" {
 
 # Conditionally create the key pair based on the variable
 resource "aws_key_pair" "new_key_pair" {
-  count    = var.key_name ? 1 : 0
   key_name = var.key_name
   #public_key = file(var.public_key_path)
   public_key = file("~/.ssh/${var.key_name}")
