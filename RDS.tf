@@ -10,8 +10,6 @@ resource "aws_db_instance" "myrds" {
    publicly_accessible = true
    skip_final_snapshot = true
    parameter_group_name = "default.mysql8.0"        # Parameter group for MySQL 8.0
-   skip_final_snapshot  = true                      # Avoid final snapshot on deletion
-   publicly_accessible  = true                      # Set to false for private access
    vpc_security_group_ids = [aws_security_group.allow_ssh.name]
 
 
