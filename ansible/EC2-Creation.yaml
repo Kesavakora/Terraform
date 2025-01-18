@@ -1,0 +1,25 @@
+---
+- name: Launch EC2 instance
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: instance creation
+      amazon.aws.ec2_instance:
+        aws_access_key: "AKIAT7JJU5VIT6F3FL7R"   # Optional if credentials are already configured
+        aws_secret_key: "sIoBTrcR01Z8BH3mW9VbXcaKrJn8fYis6YocM36T"   # Optional if credentials are already configured
+        key_name: ansible                 # Replace with your key pair name
+        instance_type: t2.micro                 # Replace with desired instance type
+        image_id: ami-0e2c8caa4b6378d8c         # Replace with the desired AMI ID
+        region: us-east-1                       # Replace with your region
+                                        # Replace with your subnet ID
+        security_groups:                        # Replace with your security group(s)
+          - default
+        tags:
+          Name: MyAnsibleInstance
+        count: 1                                # Number of instances to create
+      register: ec2
+
+    - name: Display instance information
+      debug:
+        msg: "{{ ec2.instances }}"
+
