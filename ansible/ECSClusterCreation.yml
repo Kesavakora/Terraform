@@ -1,0 +1,78 @@
+---
+- name: ECS container creation
+  hosts: localhost
+  gather_facts: no
+  vars:
+    cluster_name: "example-ecs-cluster"
+    task_family: "example-task"
+    container_name: "example-container"
+    container_image: "nginx:latest"
+    subnet_ids:
+      - "subnet-12345678"  # Replace with your subnet ID(s)
+    security_group_ids:
+      - "sg-12345678"      # Replace with your security group ID(s)
+
+  tasks:
+    - name: Create ECS Cluster
+      amazon.aws.ecs_cluster:
+      name: "{{ cluster_name }}"
+      register: ecs_cluster
+
+    - name: Create IAM Role for ECS Task Execution
+      amazon.aws.iam_role:
+        name: "ecs-task-execution-role"
+        assume_role_policy_document: >
+          {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Action": "sts:AssumeRole",
+                "Principal": {
+                  "Service": "ecs-tasks.amazonaws.com"
+                },
+                "Effect": "Allow"
+              }
+            ]
+          }
+      register: ecs_task_execution_role
+
+    - name: Attach ECS Task Execution Policy
+      amazon.aws.iam_policy:
+        name: "AmazonECSTaskExecutionRolePolicy"
+        policy_arn: "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+        roles:
+          - "{{ ecs_task_execution_role.role.name }}"
+
+    - name: Register ECS Task Definition
+      amazon.aws.ecs_taskdefinition:
+        family: "{{ task_family }}"
+        network_mode: "awsvpc"
+        requires_compatibilities: ["FARGATE"]
+        cpu: "256"
+        memory: "512"
+        execution_role_arn: "{{ ecs_task_execution_role.role.arn }}"
+        container_definitions:
+          - name: "{{ container_name }}"
+            image: "{{ container_image }}"
+            essential: true
+            cpu: 256
+            memory: 512
+            portMappings:
+              - containerPort: 80
+                hostPort: 80
+                protocol: "tcp"
+      register: ecs_task_definition
+
+    - name: Create ECS Service
+      amazon.aws.ecs_service:
+        name: "example-ecs-service"
+        cluster: "{{ ecs_cluster.cluster.cluster_name }}"
+        task_definition: "{{ ecs_task_definition.task_definition.family }}"
+        desired_count: 1
+        launch_type: "FARGATE"
+        network_configuration:
+          awsvpc_configuration:
+            subnets: "{{ subnet_ids }}"
+            security_groups: "{{ security_group_ids }}"
+            assign_public_ip: "ENABLED"
+      register: ecs_service

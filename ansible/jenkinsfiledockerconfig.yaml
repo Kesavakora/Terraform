@@ -1,0 +1,50 @@
+---
+- name: Deploy Jenkins in Docker
+  hosts: webservers
+  become: yes
+  
+  vars:
+    jenkins_image: "jenkins/jenkins:lts"
+    jenkins_container_name: "jenkins"
+    jenkins_home: "/var/jenkins_home"
+    jenkins_port: 8081
+
+  tasks:
+    - name: Ensure Docker is installed
+      ansible.builtin.package:
+        name: docker
+        state: present
+
+    - name: Install Docker Python module
+      ansible.builtin.pip:
+        name: docker
+        state: present
+
+    - name: Pull Jenkins Docker image
+      community.docker.docker_image:
+        name: "{{ jenkins_image }}"
+        source: pull
+
+    - name: Create Jenkins home directory
+      ansible.builtin.file:
+        path: "{{ jenkins_home }}"
+        state: directory
+        mode: '0755'
+
+    - name: Start Jenkins container
+      community.docker.docker_container:
+        name: "{{ jenkins_container_name }}"
+        image: "{{ jenkins_image }}"
+        state: started
+        ports:
+          - "{{ jenkins_port }}:8080"
+        volumes:
+          - "{{ jenkins_home }}:/var/jenkins_home"
+        restart_policy: always
+
+    - name: Wait for Jenkins to be ready
+      ansible.builtin.wait_for:
+        port: "{{ jenkins_port }}"
+        delay: 5
+        state: started
+        timeout: 300

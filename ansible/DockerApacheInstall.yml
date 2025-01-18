@@ -1,0 +1,62 @@
+---
+- name: Deploy Apache2 on Docker
+  hosts: all
+  become: yes
+
+  tasks:
+    # Task 1: Update the package list
+    - name: Update apt package index
+      apt:
+        update_cache: yes
+
+    # Task 2: Install Docker prerequisites
+    - name: Install Docker prerequisites
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+        state: present
+
+    # Task 3: Add Docker GPG key
+    - name: Add Docker GPG key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    # Task 4: Add Docker repository
+    - name: Add Docker repository
+      apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
+        state: present
+
+    # Task 5: Install Docker
+    - name: Install Docker
+      apt:
+        name: docker-ce
+        state: present
+
+    # Task 6: Ensure Docker is running
+    - name: Ensure Docker is running
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    # Task 7: Pull Apache Docker image
+    - name: Pull Apache Docker image
+      docker_image:
+        name: httpd
+        tag: latest
+        source: pull
+
+    # Task 8: Run Apache2 container
+    - name: Run Apache2 container on port 8083
+      docker_container:
+        name: apache2
+        image: httpd:latest
+        state: started
+        ports:
+          - "8083:80"
+        restart_policy: always
