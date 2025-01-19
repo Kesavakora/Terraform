@@ -19,7 +19,7 @@ resource "aws_instance" "Ubuntu_Instance" {
   echo "*** Completed Installing apache2"
   EOF
 
- /* provisioner "remote-exec" {
+  provisioner "remote-exec" {
     inline = [
       "touch Hello.txt",
       "echo Hello worlds  >> Hello.txt",
@@ -37,7 +37,7 @@ resource "aws_instance" "Ubuntu_Instance" {
       "sudo apt update -y",
       "sudo apt install -y docker-ce"
     ]
-  }*/
+  }
 
   connection {
     type        = "ssh"
