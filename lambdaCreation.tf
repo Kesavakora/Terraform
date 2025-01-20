@@ -14,7 +14,7 @@ resource "aws_iam_role" "lambda_execution_role" {
       }
     ]
   })
-}
+}  
 
 resource "aws_iam_policy_attachment" "lambda_policy" {
   name       = "lambda-basic-policy-attachment"
