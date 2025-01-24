@@ -6,7 +6,7 @@
     - name: instance creation
       amazon.aws.ec2_instance:
         aws_access_key: "AKIAT7JJU5VIT6F3FL7R"   # Optional if credentials are already configured
-        aws_secret_key: "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"   # Optional if credentials are already configured
+        aws_secret_key: "sIoBTrcR01Z8BH3msdfasdfW9VbXcaKrJn8fYis6YocM36T"   # Optional if credentials are already configured
         key_name: ansible                 # Replace with your key pair name
         instance_type: t2.micro                 # Replace with desired instance type
         image_id: ami-0e2c8caa4b6378d8c         # Replace with the desired AMI ID
