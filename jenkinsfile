@@ -42,7 +42,7 @@ pipeline {
             steps {
                //sh 'echo "ACTION"'
                 script{  
-                    if (params.ACCTION == "destroy"){
+                    if (params.ACTION == "destroy"){
                         sh 'echo "destroy" + params.ACTION'   
                         sh '/opt/homebrew/bin/terraform destroy -auto-approve'
                     } 
