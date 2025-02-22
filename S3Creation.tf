@@ -1,5 +1,5 @@
 /*resource "aws_s3_bucket" "mybucket" {
-  bucket = "kesava-tf-bucket"  # Change to your unique bucket name
+  bucket = "kesava-tf-bucket-1"  # Change to your unique bucket name
   #acl    = "private"  # Access control list; options include "private", "public-read", etc.
 
   tags = {
@@ -13,7 +13,7 @@
 
 # Create an S3 bucket
 resource "aws_s3_bucket" "my_bucket" {
-  bucket = "kesava-tf-bucket" # Replace with a globally unique bucket name
+  bucket = "kesava-tf-bucket-1" # Replace with a globally unique bucket name
 
   tags = {
     Name = "My S3 Bucket"
@@ -32,7 +32,7 @@ resource "aws_s3_bucket_versioning" "my_bucket_versioning" {
   backend "s3" {
     profile = "Administ" # AWS CLI profile name
     encrypt = true
-    bucket  = "kesava-tf-bucket"
+    bucket  = "kesava-tf-bucket-1"
     key     = "terraform.tfstate"
     region  = "ap-south-1"
     dynamodb_table = "terraform-lock"
