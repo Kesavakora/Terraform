@@ -40,14 +40,14 @@ pipeline {
         
         stage('Terraform apply or destroy ----------------') {
             steps {
-               //sh 'echo "comienza"'
+               //sh 'echo "ACTION"'
                 script{  
-                    if (params.ACCION == "destroy"){
-                        sh 'echo "destroy" + params.ACCION'   
+                    if (params.ACCTION == "destroy"){
+                        sh 'echo "destroy" + params.ACTION'   
                         sh '/opt/homebrew/bin/terraform destroy -auto-approve'
                     } 
                     else {
-                        sh ' echo  "apply" + params.ACCION'                 
+                        sh ' echo  "apply" + params.ACTION'                 
                         sh '/opt/homebrew/bin/terraform apply -refresh=true -auto-approve'  
                     }  // if
 
